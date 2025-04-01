@@ -8,18 +8,36 @@ fn main() {
 }
 
 
+/// Cumulative Normal Distribution (N(x))
+/// -------------------------
+///
+/// N(x) = 0.5 × [1 + erf(x/√2)]
 fn normal_cdf(x:f64) -> f64 {
+
     (0.5) * (1.0 + erf(x / std::f64::consts::SQRT_2))
 }
 
+/// D1
+/// -------------------------
+///
+/// d₁ = [ln(S/K) + (r + σ²/2)T] / (σ√T)
 fn calculate_d1(stock_price:f64, strike_price:f64, time_to_expiration_in_years:f64, risk_free_rate:f64, volatility: f64) -> f64 {
     ((stock_price / strike_price).ln() + (risk_free_rate+ ((volatility * volatility)/2.0)) * time_to_expiration_in_years) / (volatility * time_to_expiration_in_years.sqrt())
 }
 
+/// D2
+/// -------------------------
+///
+/// d₂ = d₁ - σ√T
 fn calculate_d2(d1: f64, volatility:f64, time_to_expiration_in_years:f64) -> f64 {
     d1 - (volatility * time_to_expiration_in_years.sqrt())
 }
 
+
+/// Call
+/// -------------------------
+///
+/// C= S × N(d₁) - Ke⁻ʳᵀ × N(d₂)
 fn black_sholes_call(stock_price:f64, strike_price:f64, time_to_expiration_in_years:f64, risk_free_rate:f64, volatility: f64) -> f64 {
     let d1 = calculate_d1(stock_price, strike_price, time_to_expiration_in_years, risk_free_rate, volatility);
     let d2 = calculate_d2(d1, volatility, time_to_expiration_in_years);
@@ -27,10 +45,23 @@ fn black_sholes_call(stock_price:f64, strike_price:f64, time_to_expiration_in_ye
     stock_price * normal_cdf(d1) - strike_price * discount_factor * normal_cdf(d2)
 }
 
+
+/// DiscountFactor
+/// -------------------------
+///
+/// DF = e⁻ʳᵀ
+fn discount_factor(risk_free_rate:f64, time_to_expiration_in_years: f64) -> f64 {
+    (-risk_free_rate * time_to_expiration_in_years).exp()
+}
+
+/// Put
+/// -------------------------
+///
+/// P = Ke⁻ʳᵀ × N(-d₂) - S × N(-d₁)
 fn black_sholes_put(stock_price:f64, strike_price:f64, time_to_expiration_in_years:f64, risk_free_rate:f64, volatility: f64) -> f64 {
     let d1 = calculate_d1(stock_price, strike_price, time_to_expiration_in_years, risk_free_rate, volatility);
     let d2 = calculate_d2(d1, volatility, time_to_expiration_in_years);
-    let discount_factor = (-risk_free_rate * time_to_expiration_in_years).exp();
+    let discount_factor = discount_factor(risk_free_rate, time_to_expiration_in_years);
     strike_price * discount_factor * normal_cdf(-d2) - stock_price * normal_cdf(-d1)
 }
 
