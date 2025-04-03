@@ -3,24 +3,23 @@ use std::io::Write;
 use std::os::fd::AsRawFd;
 use crate::stream::start_streaming;
 
-pub mod blacksholes;
+pub mod option_pricer;
 mod lib;
 mod stream;
 mod alloc_tracker;
-
-
+mod price_history;
 
 #[tokio::main]
 async fn main()  {
     disable_stdout_buffering().unwrap();
     let _dhat = dhat::Profiler::new_heap();
 
-    let mut ctrl_c = tokio::signal::ctrl_c();
+    let ctrl_c = tokio::signal::ctrl_c();
     tokio::select! {
         _ = start_streaming() => {
             //println!("Streaming completed");
         },
-        _ =  ctrl_c => {
+        _ = ctrl_c => {
             //println!("Ctrl+C");
         },
     }

@@ -3,12 +3,13 @@ use futures_signals::signal::{Signal, SignalExt, SignalStream};
 use std::fmt::Write as FmtWrite;
 use std::io::{stdout, Write};
 use futures::stream::{ StreamExt};
-use blacksholes_rust::blacksholes;
 use time::{OffsetDateTime};
 use tokio::time::sleep;
 use std::time::Duration;
 use rand::Rng;
-use crate::alloc_tracker::{get_allocated};
+use blacksholes_rust::blacksholes::{OptionPricer, OptionType, OptionValue};
+use crate::price_history::PriceHistory;
+use std::borrow::BorrowMut;
 
 const MIN_SECONDS: f64 = 1.0;
 const MAX_SECONDS: f64 = 2.0;
@@ -19,12 +20,14 @@ const MAX_VOL: f64 = 0.5;
 
 #[derive(Debug, Clone)]
 pub struct Price {
-    spot: f64,
-    vol: f64,
-    call: f64,
-    put: f64,
-    time: f64
+    spot: Option<f64>,
+    strike: Option<f64>,
+    vol: Option<f64>,
+    call: OptionValue,
+    put: OptionValue,
+    time: Option<f64>,
 }
+
 
 
 pub async fn start_streaming() {
@@ -38,29 +41,44 @@ pub async fn start_streaming() {
 
     SignalStream::zip(spot_price.to_stream(), volatility.to_stream())
         .map(|(spot, vol)| { calculate_options(strike_price, time_to_expiration_in_years, risk_free_rate, spot, vol) })
-        .scan(vec!(empty_price()), |state, price| {
-            state.push(price);
-            futures::future::ready(Some(state.clone()))
-        })
-        .for_each(|state| async move { output_price(&state); }).await;
+        .for_each(|price| async move {
+            PRICE_HISTORY.with(|price_history| {
+                price_history.borrow_mut().add_price(price);
+                output_price(price_history.borrow_mut().latest_prices());
+            })
+        }).await;
 
 }
 
 pub fn calculate_options(strike_price: f64, time_to_expiration_in_years: f64, risk_free_rate: f64, spot: f64, vol: f64) -> Price {
-    let call = blacksholes::calc_call(spot, strike_price, time_to_expiration_in_years, risk_free_rate, vol);
-    let put = blacksholes::calc_put(spot, strike_price, time_to_expiration_in_years, risk_free_rate, vol);
-    Price { spot, vol, call, put, time: OffsetDateTime::now_utc().unix_timestamp() as f64 }
+
+    let call = OptionPricer::new(OptionType::Call, spot, strike_price, time_to_expiration_in_years, risk_free_rate, vol).calculate_option();
+    let put = OptionPricer::new(OptionType::Put, spot, strike_price, time_to_expiration_in_years, risk_free_rate, vol).calculate_option();
+    Price {
+        spot: Some(spot),
+        vol: Some(vol),
+        call, put,
+        time: Some(OffsetDateTime::now_utc().unix_timestamp() as f64) ,
+        strike: Some(strike_price)
+    }
 }
 
+
 fn empty_price() -> Price {
-    Price { spot: 0.0, vol: 0.0, call: 0.0, put: 0.0, time: OffsetDateTime::now_utc().unix_timestamp() as f64}
+    Price { spot: None, vol: None, call: empty_option_price(), put: empty_option_price(), time: None, strike: None}
 }
+fn empty_option_price() -> OptionValue {
+    OptionValue { option_type: None, premium: None, delta: None, gamma: None, vega: None, theta: None}
+}
+
 thread_local! {
     static OUTPUT_BUF: RefCell<(String, Vec<u8>)> = RefCell::new((
         String::with_capacity(200),  // For formatting
         Vec::with_capacity(200)     // For raw byte output
     ));
+    static PRICE_HISTORY: RefCell<PriceHistory> = RefCell::new(PriceHistory::new(10));
 }
+
 fn output_price(prices: &[Price]) {
 
     OUTPUT_BUF.with(|buf| {
@@ -73,12 +91,27 @@ fn output_price(prices: &[Price]) {
         // Build complete output in one pass
         write!(
             string_buf,
-            "\x1B[2J\x1B[HAllocated: {} bytes\nSpot: {:.2}\nVol: {:.2}\nCall: {:.2}\nPut: {:.2}",
-            get_allocated(),
-            price.spot,
-            price.vol,
-            price.call,
-            price.put
+            "\x1B[2J\x1B[\
+            HSpot: {:.2}\n\
+            Strike: {:.2}\n\
+            Vol: {:.2}\n\
+            History: {:.2}\n\
+            Call [ Premium: {:.2} Delta: {:.2} Gamma: {:.2} Vega: {:.2} Theta: {:.2}]\n\
+            Put  [ Premium: {:.2} Delta: {:.2} Gamma: {:.2} Vega: {:.2} Theta: {:.2}]",
+            price.spot.unwrap_or(f64::NAN),
+            price.strike.unwrap_or(f64::NAN),
+            price.vol.unwrap_or(f64::NAN),
+            prices.len(),
+            price.call.premium.unwrap_or(f64::NAN),
+            price.call.delta.unwrap_or(f64::NAN),
+            price.call.gamma.unwrap_or(f64::NAN),
+            price.call.vega.unwrap_or(f64::NAN),
+            price.call.theta.unwrap_or(f64::NAN),
+            price.put.premium.unwrap_or(f64::NAN),
+            price.put.delta.unwrap_or(f64::NAN),
+            price.put.gamma.unwrap_or(f64::NAN),
+            price.put.vega.unwrap_or(f64::NAN),
+            price.put.theta.unwrap_or(f64::NAN),
         ).unwrap();
 
         // Convert to bytes and write

@@ -37,6 +37,7 @@
     "Cargo.Run blacksholes_rust.executor": "Run",
     "Cargo.Run.executor": "Run",
     "Cargo.Test blacksholes.executor": "Run",
+    "Cargo.Test blacksholes::tests (1).executor": "Run",
     "Cargo.Test blacksholes::tests.executor": "Run",
     "Cargo.Test lib.executor": "Run",
     "Cargo.Test main::tests.executor": "Run",
@@ -54,25 +55,7 @@
       <recent name="$PROJECT_DIR$" />
     </key>
   </component>
-  <component name="RunManager" selected="Cargo.Test lib">
-    <configuration name="Run blacksholes_rust" type="CargoCommandRunConfiguration" factoryName="Cargo Command" temporary="true">
-      <option name="buildProfileId" value="test" />
-      <option name="command" value="run --package blacksholes_rust --bin blacksholes_rust" />
-      <option name="workingDirectory" value="file://$PROJECT_DIR$" />
-      <envs />
-      <option name="emulateTerminal" value="true" />
-      <option name="channel" value="DEFAULT" />
-      <option name="requiredFeatures" value="true" />
-      <option name="allFeatures" value="false" />
-      <option name="withSudo" value="false" />
-      <option name="buildTarget" value="REMOTE" />
-      <option name="backtrace" value="SHORT" />
-      <option name="isRedirectInput" value="false" />
-      <option name="redirectInputPath" value="" />
-      <method v="2">
-        <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
-      </method>
-    </configuration>
+  <component name="RunManager" selected="Cargo.Test blacksholes">
     <configuration name="Run" type="CargoCommandRunConfiguration" factoryName="Cargo Command">
       <option name="buildProfileId" value="dev" />
       <option name="command" value="run --package blacksholes_rust --bin blacksholes_rust" />
@@ -109,8 +92,26 @@
         <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
       </method>
     </configuration>
-    <configuration name="Test blacksholes::tests" type="CargoCommandRunConfiguration" factoryName="Cargo Command" temporary="true">
+    <configuration name="Test blacksholes::tests (1)" type="CargoCommandRunConfiguration" factoryName="Cargo Command" temporary="true">
       <option name="buildProfileId" value="test" />
+      <option name="command" value="test --package blacksholes_rust --bin blacksholes_rust lib::blacksholes::tests" />
+      <option name="workingDirectory" value="file://$PROJECT_DIR$" />
+      <envs />
+      <option name="emulateTerminal" value="true" />
+      <option name="channel" value="DEFAULT" />
+      <option name="requiredFeatures" value="true" />
+      <option name="allFeatures" value="false" />
+      <option name="withSudo" value="false" />
+      <option name="buildTarget" value="REMOTE" />
+      <option name="backtrace" value="SHORT" />
+      <option name="isRedirectInput" value="false" />
+      <option name="redirectInputPath" value="" />
+      <method v="2">
+        <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Test blacksholes::tests" type="CargoCommandRunConfiguration" factoryName="Cargo Command" temporary="true">
+      <option name="buildProfileId" value="dev" />
       <option name="command" value="test --package blacksholes_rust --bin blacksholes_rust lib::blacksholes::tests" />
       <option name="workingDirectory" value="file://$PROJECT_DIR$" />
       <envs />
@@ -165,11 +166,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Cargo.Test blacksholes" />
+        <item itemvalue="Cargo.Test blacksholes::tests (1)" />
         <item itemvalue="Cargo.Test lib" />
         <item itemvalue="Cargo.Test blacksholes::tests" />
-        <item itemvalue="Cargo.Test blacksholes" />
         <item itemvalue="Cargo.Test main::tests" />
-        <item itemvalue="Cargo.Run blacksholes_rust" />
       </list>
     </recent_temporary>
   </component>
