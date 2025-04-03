@@ -30,3 +30,10 @@ d₂ = 0.325 - 0.2×√1 = 0.125
 N(d₁) = 0.627
 N(d₂) = 0.550
 C = 100×0.627 - 100×e⁻⁰·⁰⁵×0.550 ≈ 10.45
+
+
+## Run benchmark on macOS 
+sudo cargo bench
+
+## Run flamegraph 
+sudo cargo bench --bench criterion_benchmark -- --profile-time 10
