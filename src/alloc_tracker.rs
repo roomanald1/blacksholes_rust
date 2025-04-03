@@ -1,4 +1,4 @@
-//use dhat::Alloc;
+use dhat::Alloc;
 use std::alloc::{GlobalAlloc, Layout, System};
 use std::sync::atomic::{AtomicUsize, Ordering};
 
@@ -23,9 +23,9 @@ pub fn get_allocated() -> usize {
 }
 
 //Live Alloc Tracker
-#[global_allocator]
+//#[global_allocator]
 static GLOBAL: TrackingAllocator = TrackingAllocator;
 
 //Uncomment this to use DHat HeapDump
-//#[global_allocator]
-//static ALLOCATOR: Alloc = Alloc;
+#[global_allocator]
+static ALLOCATOR: Alloc = Alloc;

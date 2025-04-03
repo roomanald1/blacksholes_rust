@@ -1,16 +1,13 @@
+use std::cell::RefCell;
 use futures_signals::signal::{Signal, SignalExt, SignalStream};
+use std::fmt::Write as FmtWrite;
+use std::io::{stdout, Write};
 use futures::stream::{ StreamExt};
 use blacksholes_rust::blacksholes;
-use crossterm::{
-    cursor,  queue,
-    style::{ Print, ResetColor},
-    terminal::{ClearType, Clear},
-};
 use time::{OffsetDateTime};
 use tokio::time::sleep;
 use std::time::Duration;
 use rand::Rng;
-use std::io::{stdout, Write};
 use crate::alloc_tracker::{get_allocated};
 
 const MIN_SECONDS: f64 = 1.0;
@@ -45,7 +42,7 @@ pub async fn start_streaming() {
             state.push(price);
             futures::future::ready(Some(state.clone()))
         })
-        .for_each(|state| async move { output_price(state); }).await;
+        .for_each(|state| async move { output_price(&state); }).await;
 
 }
 
@@ -58,27 +55,41 @@ pub fn calculate_options(strike_price: f64, time_to_expiration_in_years: f64, ri
 fn empty_price() -> Price {
     Price { spot: 0.0, vol: 0.0, call: 0.0, put: 0.0, time: OffsetDateTime::now_utc().unix_timestamp() as f64}
 }
+thread_local! {
+    static OUTPUT_BUF: RefCell<(String, Vec<u8>)> = RefCell::new((
+        String::with_capacity(200),  // For formatting
+        Vec::with_capacity(200)     // For raw byte output
+    ));
+}
+fn output_price(prices: &[Price]) {
 
-fn output_price(mut prices: Vec<Price>) {
-    let empty_price = empty_price();
-    let price = prices.last().unwrap_or(&empty_price);
+    OUTPUT_BUF.with(|buf| {
+        let mut buffer = buf.borrow_mut();
+        let (string_buf, byte_buf) = &mut *buffer;
 
-    queue!(
-        stdout(),
-        cursor::MoveTo(0,0),
-        Clear(ClearType::All),
-        Print(format!("Allocated: {} bytes", get_allocated())),
-        Print(format!("\tSpot: {:.2}", price.spot)),
-        Print(format!("\tVol: {:.2}", price.spot)),
-        Print("\tCall:"),
-        Print(format!("{:.2}",price.call)),
-        ResetColor,
-        Print("\tPut:"),
-        Print(format!("{:.2}",price.put)),
-        ResetColor,
-    ).unwrap();
+        let empty_price = empty_price();
+        let price = prices.last().unwrap_or(&empty_price);
 
-    stdout().flush().unwrap();
+        // Build complete output in one pass
+        write!(
+            string_buf,
+            "\x1B[2J\x1B[HAllocated: {} bytes\nSpot: {:.2}\nVol: {:.2}\nCall: {:.2}\nPut: {:.2}",
+            get_allocated(),
+            price.spot,
+            price.vol,
+            price.call,
+            price.put
+        ).unwrap();
+
+        // Convert to bytes and write
+        byte_buf.extend_from_slice(string_buf.as_bytes());
+        let mut handle = stdout().lock();
+        handle.write_all(&byte_buf).unwrap();//lock gets raw stdout
+        handle.flush().unwrap();
+        string_buf.clear();
+        byte_buf.clear();
+    })
+
 }
 
 

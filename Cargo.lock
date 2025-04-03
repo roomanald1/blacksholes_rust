@@ -141,6 +141,7 @@ dependencies = [
  "dhat",
  "futures",
  "futures-signals",
+ "libc",
  "libm",
  "pprof",
  "rand",
