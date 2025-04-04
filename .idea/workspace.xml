@@ -34,6 +34,7 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "Cargo.Build `Test lib`.executor": "Run",
     "Cargo.Run blacksholes_rust.executor": "Run",
     "Cargo.Run.executor": "Run",
     "Cargo.Test blacksholes.executor": "Run",
@@ -55,7 +56,7 @@
       <recent name="$PROJECT_DIR$" />
     </key>
   </component>
-  <component name="RunManager" selected="Cargo.Test blacksholes">
+  <component name="RunManager" selected="Cargo.Test lib">
     <configuration name="Run" type="CargoCommandRunConfiguration" factoryName="Cargo Command">
       <option name="buildProfileId" value="dev" />
       <option name="command" value="run --package blacksholes_rust --bin blacksholes_rust" />
@@ -166,9 +167,9 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Cargo.Test lib" />
         <item itemvalue="Cargo.Test blacksholes" />
         <item itemvalue="Cargo.Test blacksholes::tests (1)" />
-        <item itemvalue="Cargo.Test lib" />
         <item itemvalue="Cargo.Test blacksholes::tests" />
         <item itemvalue="Cargo.Test main::tests" />
       </list>

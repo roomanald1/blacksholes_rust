@@ -52,8 +52,9 @@ pub async fn start_streaming() {
 
 pub fn calculate_options(strike_price: f64, time_to_expiration_in_years: f64, risk_free_rate: f64, spot: f64, vol: f64) -> Price {
 
-    let call = OptionPricer::new(OptionType::Call, spot, strike_price, time_to_expiration_in_years, risk_free_rate, vol).calculate_option();
-    let put = OptionPricer::new(OptionType::Put, spot, strike_price, time_to_expiration_in_years, risk_free_rate, vol).calculate_option();
+    let mut option_pricer = OptionPricer::new(spot, strike_price, time_to_expiration_in_years, risk_free_rate, vol);
+    let call = option_pricer.calculate_option(OptionType::Call);
+    let put = option_pricer.calculate_option(OptionType::Put);
     Price {
         spot: Some(spot),
         vol: Some(vol),
@@ -68,7 +69,7 @@ fn empty_price() -> Price {
     Price { spot: None, vol: None, call: empty_option_price(), put: empty_option_price(), time: None, strike: None}
 }
 fn empty_option_price() -> OptionValue {
-    OptionValue { option_type: None, premium: None, delta: None, gamma: None, vega: None, theta: None}
+    OptionValue { option_type: None, premium: None, delta: None, gamma: None, vega: None, theta: None, rho: None}
 }
 
 thread_local! {
@@ -96,8 +97,8 @@ fn output_price(prices: &[Price]) {
             Strike: {:.2}\n\
             Vol: {:.2}\n\
             History: {:.2}\n\
-            Call [ Premium: {:.2} Delta: {:.2} Gamma: {:.2} Vega: {:.2} Theta: {:.2}]\n\
-            Put  [ Premium: {:.2} Delta: {:.2} Gamma: {:.2} Vega: {:.2} Theta: {:.2}]",
+            Call [ Premium: {:.2} Delta: {:.2} Gamma: {:.2} Vega: {:.2} Theta: {:.2} Rho: {:.2}]\n\
+            Put  [ Premium: {:.2} Delta: {:.2} Gamma: {:.2} Vega: {:.2} Theta: {:.2} Rho: {:.2}]",
             price.spot.unwrap_or(f64::NAN),
             price.strike.unwrap_or(f64::NAN),
             price.vol.unwrap_or(f64::NAN),
@@ -107,11 +108,13 @@ fn output_price(prices: &[Price]) {
             price.call.gamma.unwrap_or(f64::NAN),
             price.call.vega.unwrap_or(f64::NAN),
             price.call.theta.unwrap_or(f64::NAN),
+            price.call.rho.unwrap_or(f64::NAN),
             price.put.premium.unwrap_or(f64::NAN),
             price.put.delta.unwrap_or(f64::NAN),
             price.put.gamma.unwrap_or(f64::NAN),
             price.put.vega.unwrap_or(f64::NAN),
             price.put.theta.unwrap_or(f64::NAN),
+            price.put.rho.unwrap_or(f64::NAN)
         ).unwrap();
 
         // Convert to bytes and write
