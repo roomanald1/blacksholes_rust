@@ -35,6 +35,9 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "Cargo.Build `Test lib`.executor": "Run",
+    "Cargo.Build `Test montecarlo::test::monte_carlo_vs_blacksholes`.executor": "Run",
+    "Cargo.Build `Test montecarlo::test::test_uniform_rng`.executor": "Run",
+    "Cargo.Build `Test montecarlo::test`.executor": "Run",
     "Cargo.Run blacksholes_rust.executor": "Run",
     "Cargo.Run.executor": "Run",
     "Cargo.Test blacksholes.executor": "Run",
@@ -42,6 +45,11 @@
     "Cargo.Test blacksholes::tests.executor": "Run",
     "Cargo.Test lib.executor": "Run",
     "Cargo.Test main::tests.executor": "Run",
+    "Cargo.Test montecarlo.executor": "Run",
+    "Cargo.Test montecarlo::test.executor": "Run",
+    "Cargo.Test montecarlo::test::monte_carlo_convergence.executor": "Run",
+    "Cargo.Test montecarlo::test::monte_carlo_vs_blacksholes.executor": "Run",
+    "Cargo.Test montecarlo::test::test_uniform_rng.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.rust.reset.selective.auto.import": "true",
     "org.rust.cargo.project.model.PROJECT_DISCOVERY": "true",
@@ -56,7 +64,7 @@
       <recent name="$PROJECT_DIR$" />
     </key>
   </component>
-  <component name="RunManager" selected="Cargo.Test lib">
+  <component name="RunManager" selected="Cargo.Test montecarlo::test">
     <configuration name="Run" type="CargoCommandRunConfiguration" factoryName="Cargo Command">
       <option name="buildProfileId" value="dev" />
       <option name="command" value="run --package blacksholes_rust --bin blacksholes_rust" />
@@ -76,7 +84,6 @@
       </method>
     </configuration>
     <configuration name="Test blacksholes" type="CargoCommandRunConfiguration" factoryName="Cargo Command" temporary="true">
-      <option name="buildProfileId" value="test" />
       <option name="command" value="test --package blacksholes_rust --bin blacksholes_rust lib::blacksholes" />
       <option name="workingDirectory" value="file://$PROJECT_DIR$" />
       <envs />
@@ -93,26 +100,7 @@
         <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
       </method>
     </configuration>
-    <configuration name="Test blacksholes::tests (1)" type="CargoCommandRunConfiguration" factoryName="Cargo Command" temporary="true">
-      <option name="buildProfileId" value="test" />
-      <option name="command" value="test --package blacksholes_rust --bin blacksholes_rust lib::blacksholes::tests" />
-      <option name="workingDirectory" value="file://$PROJECT_DIR$" />
-      <envs />
-      <option name="emulateTerminal" value="true" />
-      <option name="channel" value="DEFAULT" />
-      <option name="requiredFeatures" value="true" />
-      <option name="allFeatures" value="false" />
-      <option name="withSudo" value="false" />
-      <option name="buildTarget" value="REMOTE" />
-      <option name="backtrace" value="SHORT" />
-      <option name="isRedirectInput" value="false" />
-      <option name="redirectInputPath" value="" />
-      <method v="2">
-        <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="Test blacksholes::tests" type="CargoCommandRunConfiguration" factoryName="Cargo Command" temporary="true">
-      <option name="buildProfileId" value="dev" />
       <option name="command" value="test --package blacksholes_rust --bin blacksholes_rust lib::blacksholes::tests" />
       <option name="workingDirectory" value="file://$PROJECT_DIR$" />
       <envs />
@@ -130,7 +118,6 @@
       </method>
     </configuration>
     <configuration name="Test lib" type="CargoCommandRunConfiguration" factoryName="Cargo Command" temporary="true">
-      <option name="buildProfileId" value="test" />
       <option name="command" value="test --package blacksholes_rust --bin blacksholes_rust lib" />
       <option name="workingDirectory" value="file://$PROJECT_DIR$" />
       <envs />
@@ -147,9 +134,25 @@
         <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
       </method>
     </configuration>
-    <configuration name="Test main::tests" type="CargoCommandRunConfiguration" factoryName="Cargo Command" temporary="true">
-      <option name="buildProfileId" value="test" />
-      <option name="command" value="test --package blacksholes_rust --bin blacksholes_rust tests" />
+    <configuration name="Test montecarlo::test" type="CargoCommandRunConfiguration" factoryName="Cargo Command" temporary="true">
+      <option name="command" value="test --package blacksholes_rust --bin blacksholes_rust montecarlo::test" />
+      <option name="workingDirectory" value="file://$PROJECT_DIR$" />
+      <envs />
+      <option name="emulateTerminal" value="true" />
+      <option name="channel" value="DEFAULT" />
+      <option name="requiredFeatures" value="true" />
+      <option name="allFeatures" value="false" />
+      <option name="withSudo" value="false" />
+      <option name="buildTarget" value="REMOTE" />
+      <option name="backtrace" value="SHORT" />
+      <option name="isRedirectInput" value="false" />
+      <option name="redirectInputPath" value="" />
+      <method v="2">
+        <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Test montecarlo::test::monte_carlo_vs_blacksholes" type="CargoCommandRunConfiguration" factoryName="Cargo Command" temporary="true">
+      <option name="command" value="test --package blacksholes_rust --bin blacksholes_rust montecarlo::test::monte_carlo_vs_blacksholes -- --exact" />
       <option name="workingDirectory" value="file://$PROJECT_DIR$" />
       <envs />
       <option name="emulateTerminal" value="true" />
@@ -167,11 +170,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Cargo.Test lib" />
+        <item itemvalue="Cargo.Test montecarlo::test" />
+        <item itemvalue="Cargo.Test montecarlo::test::monte_carlo_vs_blacksholes" />
         <item itemvalue="Cargo.Test blacksholes" />
-        <item itemvalue="Cargo.Test blacksholes::tests (1)" />
+        <item itemvalue="Cargo.Test lib" />
         <item itemvalue="Cargo.Test blacksholes::tests" />
-        <item itemvalue="Cargo.Test main::tests" />
       </list>
     </recent_temporary>
   </component>

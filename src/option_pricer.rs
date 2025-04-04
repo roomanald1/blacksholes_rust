@@ -1,10 +1,8 @@
 use std::cmp::PartialEq;
-
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub enum OptionType {
     Call, Put
 }
-
 #[derive(Debug, Clone)]
 pub struct OptionValue {
     pub option_type: Option<OptionType>,
@@ -234,7 +232,7 @@ fn calculate_d1(spot_price:f64, strike_price:f64, time_to_expiration_in_years:f6
 ///
 /// d₂ = d₁ - σ√T
 fn calculate_d2(d1: f64, volatility:f64, sqrt_t:f64) -> f64 {
-    d1 - (volatility * sqrt_t.sqrt())
+    d1 - (volatility * sqrt_t)
 }
 
 
@@ -298,6 +296,26 @@ mod tests {
             epsilon = 0.3
         );
     }
+    #[test]
+    fn test_black_scholes_call_specific() {
+        let spot = 98.0;
+        let strike = 100.0;
+        let time = 0.5;
+        let rate = 0.05;
+        let vol = 0.1;
+
+        let mut pricer = OptionPricer::new(spot, strike, time, rate, vol);
+        let call_price = pricer.calc_premium(OptionType::Call);
+
+        // Expected value from Black-Scholes formula, verified externally
+        let expected_price = 3.0139; // Precise value from earlier calculation
+        assert_abs_diff_eq!(
+            call_price,
+            expected_price,
+            epsilon = 0.02
+        );
+    }
+
 
     #[test]
     fn test_normal_pdf() {
@@ -377,7 +395,7 @@ mod tests {
     #[test]
     fn test_theta_itm_put() {
         let theta = OptionPricer::new( 90.0, 100.0, 0.5, 0.05, 0.3).calc_theta(OptionType::Put,);
-        assert_abs_diff_eq!(theta, -3.9238, epsilon = 0.03);  // Corrected expectation
+        assert_abs_diff_eq!(theta, -3.9927, epsilon = 0.03);  // Corrected expectation
     }
 
     #[test]

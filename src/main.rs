@@ -6,8 +6,11 @@ use crate::stream::start_streaming;
 pub mod option_pricer;
 mod lib;
 mod stream;
-mod alloc_tracker;
+pub mod alloc_tracker;
 mod price_history;
+pub mod montecarlo;
+pub mod utils;
+
 
 #[tokio::main]
 async fn main()  {

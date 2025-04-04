@@ -7,9 +7,9 @@ use time::{OffsetDateTime};
 use tokio::time::sleep;
 use std::time::Duration;
 use rand::Rng;
-use blacksholes_rust::blacksholes::{OptionPricer, OptionType, OptionValue};
 use crate::price_history::PriceHistory;
 use std::borrow::BorrowMut;
+use crate::option_pricer::{OptionPricer, OptionType, OptionValue};
 
 const MIN_SECONDS: f64 = 1.0;
 const MAX_SECONDS: f64 = 2.0;
