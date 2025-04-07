@@ -1,8 +1,6 @@
 use std::cmp::PartialEq;
-#[derive(Debug, Clone, Copy, PartialEq)]
-pub enum OptionType {
-    Call, Put
-}
+use crate::utils::OptionType;
+
 #[derive(Debug, Clone)]
 pub struct OptionValue {
     pub option_type: Option<OptionType>,

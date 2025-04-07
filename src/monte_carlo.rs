@@ -2,7 +2,7 @@ use rand::{Rng};
 use rand_distr::{ StandardNormal, Distribution};
 use rand_distr::num_traits::real::Real;
 use rayon::prelude::*;
-use crate::option_pricer::OptionType;
+use crate::utils::OptionType;
 
 pub fn monte_carlo(option_type: OptionType, spot: f64, risk_free_rate: f64, vol: f64, time_to_expiry: f64, strike: f64, number_of_sims: usize) -> f64 {
     let mut total_payoff = 0.0;
@@ -32,8 +32,9 @@ pub fn monte_carlo(option_type: OptionType, spot: f64, risk_free_rate: f64, vol:
 
 #[cfg(test)]
 mod test{
-    use crate::montecarlo::{monte_carlo};
-    use crate::option_pricer::{OptionPricer, OptionType};
+    use crate::utils::OptionType;
+    use crate::monte_carlo::{monte_carlo};
+    use crate::option_pricer::{OptionPricer};
 
     #[test]
     fn monte_carlo_vs_blacksholes() {

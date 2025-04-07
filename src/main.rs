@@ -1,21 +1,14 @@
 use std::io;
 use std::io::Write;
 use std::os::fd::AsRawFd;
-use crate::stream::start_streaming;
-
-pub mod option_pricer;
-mod lib;
-mod stream;
-pub mod alloc_tracker;
-mod price_history;
-pub mod montecarlo;
-pub mod utils;
-
+use dhat::Profiler;
+use blacksholes_rust::stream;
+use blacksholes_rust::stream::start_streaming;
 
 #[tokio::main]
 async fn main()  {
     disable_stdout_buffering().unwrap();
-    let _dhat = dhat::Profiler::new_heap();
+    let _dhat = Profiler::new_heap();
 
     let ctrl_c = tokio::signal::ctrl_c();
     tokio::select! {
@@ -30,7 +23,6 @@ async fn main()  {
     //Also need to uncomment line from alloc_tracker
     //profile_blacksholes()
 }
-
 fn disable_stdout_buffering() -> io::Result<()> {
     // Flush any existing output first
     io::stdout().flush()?;
@@ -63,4 +55,3 @@ fn profile_blacksholes(){
 async fn calculate_options(){
     stream::calculate_options(100.0, 1.0, 0.05, 98.0, 0.2);
 }
-

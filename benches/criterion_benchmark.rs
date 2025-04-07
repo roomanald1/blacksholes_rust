@@ -6,7 +6,9 @@ use criterion::{
     criterion_main
 };
 use pprof::criterion::{PProfProfiler, Output};
-use blacksholes_rust::blacksholes::{monte_carlo, OptionPricer, OptionType, OptionValue};
+use blacksholes_rust::monte_carlo::monte_carlo;
+use blacksholes_rust::option_pricer::{OptionPricer, OptionValue};
+use blacksholes_rust::utils::OptionType;
 
 fn criterion_benchmark(c: &mut Criterion) {
 
@@ -29,9 +31,9 @@ fn criterion_benchmark(c: &mut Criterion) {
 
     // Force symbol preservation
     #[inline(never)]
-    #[unsafe(export_name = "profiled_blackscholes")]  // This prevents name mangling
+    #[unsafe(export_name = "profiled_monte_carlo")]  // This prevents name mangling
     pub fn profiled_monte_carlo() -> f64 {
-        monte_carlo(black_box(OptionType::Call), black_box(100.0), black_box(100.0), black_box(1.0), black_box(0.05), black_box(0.2))
+        monte_carlo(black_box(OptionType::Call), black_box(100.0), black_box(100.0), black_box(1.0), black_box(0.05), black_box(0.2), black_box(1_000_000))
     }
     c.bench_function("calc_call_monte_carlo", |b| {
         b.iter(|| {

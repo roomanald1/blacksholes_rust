@@ -50,6 +50,7 @@
     "Cargo.Test montecarlo::test::monte_carlo_convergence.executor": "Run",
     "Cargo.Test montecarlo::test::monte_carlo_vs_blacksholes.executor": "Run",
     "Cargo.Test montecarlo::test::test_uniform_rng.executor": "Run",
+    "Cargo.clean.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.rust.reset.selective.auto.import": "true",
     "org.rust.cargo.project.model.PROJECT_DISCOVERY": "true",
@@ -61,10 +62,11 @@
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src" />
+      <recent name="$PROJECT_DIR$/ah" />
       <recent name="$PROJECT_DIR$" />
     </key>
   </component>
-  <component name="RunManager" selected="Cargo.Test montecarlo::test">
+  <component name="RunManager" selected="Cargo.Test lib">
     <configuration name="Run" type="CargoCommandRunConfiguration" factoryName="Cargo Command">
       <option name="buildProfileId" value="dev" />
       <option name="command" value="run --package blacksholes_rust --bin blacksholes_rust" />
@@ -170,11 +172,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Cargo.Test lib" />
+        <item itemvalue="Cargo.Test blacksholes::tests" />
         <item itemvalue="Cargo.Test montecarlo::test" />
         <item itemvalue="Cargo.Test montecarlo::test::monte_carlo_vs_blacksholes" />
         <item itemvalue="Cargo.Test blacksholes" />
-        <item itemvalue="Cargo.Test lib" />
-        <item itemvalue="Cargo.Test blacksholes::tests" />
       </list>
     </recent_temporary>
   </component>
