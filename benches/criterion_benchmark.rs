@@ -14,12 +14,30 @@ fn criterion_benchmark(c: &mut Criterion) {
 
     // Force symbol preservation
     #[inline(never)]
+    #[unsafe(export_name = "profiled_blackscholes_call")]  // This prevents name mangling
+    pub fn profiled_blackscholes_call() -> f64 {
+        let mut option_pricer = black_box(OptionPricer::new(black_box(100.0), black_box(100.0), black_box(1.0), black_box(0.05), black_box(0.2)));
+        option_pricer.calc_premium(black_box(OptionType::Call))
+    }
+    c.bench_function("BlackSholes - Call (no Greeks)", |b| {
+        b.iter(|| {
+            unsafe {
+                black_box(profiled_blackscholes_call())
+            }
+        });
+    });
+
+
+
+
+    // Force symbol preservation
+    #[inline(never)]
     #[unsafe(export_name = "profiled_blackscholes")]  // This prevents name mangling
-    pub fn profiled_blackscholes_call() -> OptionValue {
+    pub fn profiled_blackscholes() -> OptionValue {
         let mut option_pricer = black_box(OptionPricer::new(black_box(100.0), black_box(100.0), black_box(1.0), black_box(0.05), black_box(0.2)));
         option_pricer.calculate_option(black_box(OptionType::Call))
     }
-    c.bench_function("calc_call", |b| {
+    c.bench_function("BlackSholes - Call (with Greeks)", |b| {
         b.iter(|| {
             unsafe {
                 black_box(profiled_blackscholes_call())
@@ -35,7 +53,7 @@ fn criterion_benchmark(c: &mut Criterion) {
     pub fn profiled_monte_carlo() -> f64 {
         monte_carlo(black_box(OptionType::Call), black_box(100.0), black_box(100.0), black_box(1.0), black_box(0.05), black_box(0.2), black_box(1_000_000))
     }
-    c.bench_function("calc_call_monte_carlo", |b| {
+    c.bench_function("monte_carlo - Call", |b| {
         b.iter(|| {
             unsafe {
                 black_box(profiled_monte_carlo())

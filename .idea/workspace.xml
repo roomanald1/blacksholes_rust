@@ -7,13 +7,13 @@
     <cargoProject FILE="$PROJECT_DIR$/Cargo.toml" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f305ec06-f93d-48fe-8428-cde63ab496ac" name="Changes" comment="" />
+    <list default="true" id="868267e8-8008-4914-994d-f19818337741" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="RsBuildProfile:test" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="RsBuildProfile:dev" />
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
@@ -22,52 +22,44 @@
     </option>
   </component>
   <component name="MacroExpansionManager">
-    <option name="directoryName" value="oMW8hq34" />
+    <option name="directoryName" value="tDm04SqE" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 7
 }</component>
-  <component name="ProjectId" id="2v7WiDspsoOt9gzvtUn8WViiFkG" />
+  <component name="ProjectId" id="2vRJRASQ0eh2WP8Wt1o9DqYaiK4" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Cargo.Build `Test lib`.executor": "Run",
-    "Cargo.Build `Test montecarlo::test::monte_carlo_vs_blacksholes`.executor": "Run",
-    "Cargo.Build `Test montecarlo::test::test_uniform_rng`.executor": "Run",
-    "Cargo.Build `Test montecarlo::test`.executor": "Run",
-    "Cargo.Run blacksholes_rust.executor": "Run",
-    "Cargo.Run.executor": "Run",
-    "Cargo.Test blacksholes.executor": "Run",
-    "Cargo.Test blacksholes::tests (1).executor": "Run",
-    "Cargo.Test blacksholes::tests.executor": "Run",
-    "Cargo.Test lib.executor": "Run",
-    "Cargo.Test main::tests.executor": "Run",
-    "Cargo.Test montecarlo.executor": "Run",
-    "Cargo.Test montecarlo::test.executor": "Run",
-    "Cargo.Test montecarlo::test::monte_carlo_convergence.executor": "Run",
-    "Cargo.Test montecarlo::test::monte_carlo_vs_blacksholes.executor": "Run",
-    "Cargo.Test montecarlo::test::test_uniform_rng.executor": "Run",
-    "Cargo.clean.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.rust.reset.selective.auto.import": "true",
-    "org.rust.cargo.project.model.PROJECT_DISCOVERY": "true",
-    "org.rust.cargo.project.model.impl.CargoExternalSystemProjectAware.subscribe.first.balloon": "",
-    "org.rust.disableDetachedFileInspection/Users/ronnieday/dev/blacksholes_rust/src/benches/criterion_benchmark.rs": "true",
-    "org.rust.first.attach.projects": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Cargo.Run blacksholes_rust.executor&quot;: &quot;Run&quot;,
+    &quot;Cargo.Test backtest::tests::gets_n_days_data.executor&quot;: &quot;Debug&quot;,
+    &quot;Cargo.Test volatility.executor&quot;: &quot;Run&quot;,
+    &quot;Cargo.Test volatility::tests (1).executor&quot;: &quot;Run&quot;,
+    &quot;Cargo.Test volatility::tests (2).executor&quot;: &quot;Run&quot;,
+    &quot;Cargo.Test volatility::tests.executor&quot;: &quot;Run&quot;,
+    &quot;Cargo.Test volatility::tests::test_against_riskmetrics_example.executor&quot;: &quot;Run&quot;,
+    &quot;Cargo.Test volatility::tests::test_ewma_against_external_reference.executor&quot;: &quot;Run&quot;,
+    &quot;Cargo.Test volatility::tests::test_ewma_volatility_with_warmup.executor&quot;: &quot;Run&quot;,
+    &quot;Cargo.Test volatility::tests::test_with_known_values.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.rust.reset.selective.auto.import&quot;: &quot;true&quot;,
+    &quot;org.rust.cargo.project.model.PROJECT_DISCOVERY&quot;: &quot;true&quot;,
+    &quot;org.rust.first.attach.projects&quot;: &quot;true&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;advanced.settings&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/src" />
-      <recent name="$PROJECT_DIR$/ah" />
-      <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/src/data" />
+      <recent name="$PROJECT_DIR$/src/pricing" />
+      <recent name="$PROJECT_DIR$/src/utils" />
     </key>
   </component>
-  <component name="RunManager" selected="Cargo.Test lib">
-    <configuration name="Run" type="CargoCommandRunConfiguration" factoryName="Cargo Command">
+  <component name="RunManager" selected="Cargo.Run blacksholes_rust">
+    <configuration name="Run blacksholes_rust" type="CargoCommandRunConfiguration" factoryName="Cargo Command">
       <option name="buildProfileId" value="dev" />
       <option name="command" value="run --package blacksholes_rust --bin blacksholes_rust" />
       <option name="workingDirectory" value="file://$PROJECT_DIR$" />
@@ -85,8 +77,9 @@
         <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
       </method>
     </configuration>
-    <configuration name="Test blacksholes" type="CargoCommandRunConfiguration" factoryName="Cargo Command" temporary="true">
-      <option name="command" value="test --package blacksholes_rust --bin blacksholes_rust lib::blacksholes" />
+    <configuration name="Test backtest::tests::gets_n_days_data" type="CargoCommandRunConfiguration" factoryName="Cargo Command" temporary="true">
+      <option name="buildProfileId" value="dev" />
+      <option name="command" value="test --package blacksholes_rust --lib backtest::tests::gets_n_days_data -- --exact" />
       <option name="workingDirectory" value="file://$PROJECT_DIR$" />
       <envs />
       <option name="emulateTerminal" value="true" />
@@ -102,8 +95,8 @@
         <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
       </method>
     </configuration>
-    <configuration name="Test blacksholes::tests" type="CargoCommandRunConfiguration" factoryName="Cargo Command" temporary="true">
-      <option name="command" value="test --package blacksholes_rust --bin blacksholes_rust lib::blacksholes::tests" />
+    <configuration name="Test blacksholes_rust" type="CargoCommandRunConfiguration" factoryName="Cargo Command">
+      <option name="command" value="test --workspace" />
       <option name="workingDirectory" value="file://$PROJECT_DIR$" />
       <envs />
       <option name="emulateTerminal" value="true" />
@@ -119,8 +112,9 @@
         <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
       </method>
     </configuration>
-    <configuration name="Test lib" type="CargoCommandRunConfiguration" factoryName="Cargo Command" temporary="true">
-      <option name="command" value="test --package blacksholes_rust --bin blacksholes_rust lib" />
+    <configuration name="Test volatility::tests (2)" type="CargoCommandRunConfiguration" factoryName="Cargo Command" temporary="true">
+      <option name="buildProfileId" value="dev" />
+      <option name="command" value="test --package blacksholes_rust --lib volatility::tests" />
       <option name="workingDirectory" value="file://$PROJECT_DIR$" />
       <envs />
       <option name="emulateTerminal" value="true" />
@@ -136,8 +130,9 @@
         <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
       </method>
     </configuration>
-    <configuration name="Test montecarlo::test" type="CargoCommandRunConfiguration" factoryName="Cargo Command" temporary="true">
-      <option name="command" value="test --package blacksholes_rust --bin blacksholes_rust montecarlo::test" />
+    <configuration name="Test volatility::tests" type="CargoCommandRunConfiguration" factoryName="Cargo Command" temporary="true">
+      <option name="buildProfileId" value="test" />
+      <option name="command" value="test --package blacksholes_rust --lib volatility::tests" />
       <option name="workingDirectory" value="file://$PROJECT_DIR$" />
       <envs />
       <option name="emulateTerminal" value="true" />
@@ -153,8 +148,25 @@
         <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
       </method>
     </configuration>
-    <configuration name="Test montecarlo::test::monte_carlo_vs_blacksholes" type="CargoCommandRunConfiguration" factoryName="Cargo Command" temporary="true">
-      <option name="command" value="test --package blacksholes_rust --bin blacksholes_rust montecarlo::test::monte_carlo_vs_blacksholes -- --exact" />
+    <configuration name="Test volatility::tests::test_against_riskmetrics_example" type="CargoCommandRunConfiguration" factoryName="Cargo Command" temporary="true">
+      <option name="command" value="test --package blacksholes_rust --lib volatility::tests::test_against_riskmetrics_example -- --exact" />
+      <option name="workingDirectory" value="file://$PROJECT_DIR$" />
+      <envs />
+      <option name="emulateTerminal" value="true" />
+      <option name="channel" value="DEFAULT" />
+      <option name="requiredFeatures" value="true" />
+      <option name="allFeatures" value="false" />
+      <option name="withSudo" value="false" />
+      <option name="buildTarget" value="REMOTE" />
+      <option name="backtrace" value="SHORT" />
+      <option name="isRedirectInput" value="false" />
+      <option name="redirectInputPath" value="" />
+      <method v="2">
+        <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Test volatility::tests::test_with_known_values" type="CargoCommandRunConfiguration" factoryName="Cargo Command" temporary="true">
+      <option name="command" value="test --package blacksholes_rust --lib volatility::tests::test_with_known_values -- --exact" />
       <option name="workingDirectory" value="file://$PROJECT_DIR$" />
       <envs />
       <option name="emulateTerminal" value="true" />
@@ -172,11 +184,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Cargo.Test lib" />
-        <item itemvalue="Cargo.Test blacksholes::tests" />
-        <item itemvalue="Cargo.Test montecarlo::test" />
-        <item itemvalue="Cargo.Test montecarlo::test::monte_carlo_vs_blacksholes" />
-        <item itemvalue="Cargo.Test blacksholes" />
+        <item itemvalue="Cargo.Test backtest::tests::gets_n_days_data" />
+        <item itemvalue="Cargo.Test volatility::tests" />
+        <item itemvalue="Cargo.Test volatility::tests::test_against_riskmetrics_example" />
+        <item itemvalue="Cargo.Test volatility::tests::test_with_known_values" />
+        <item itemvalue="Cargo.Test volatility::tests (2)" />
       </list>
     </recent_temporary>
   </component>
@@ -184,4 +196,25 @@
     <option name="toolchainHomeDirectory" value="$USER_HOME$/.cargo/bin" />
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/src/data/btc_fetch.rs</url>
+          <line>142</line>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/src/main.rs</url>
+          <line>20</line>
+          <option name="timeStamp" value="6" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/src/main.rs</url>
+          <line>22</line>
+          <option name="timeStamp" value="7" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
 </project>

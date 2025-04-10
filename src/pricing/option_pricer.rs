@@ -1,4 +1,3 @@
-use std::cmp::PartialEq;
 use crate::utils::OptionType;
 
 #[derive(Debug, Clone)]
@@ -63,16 +62,17 @@ impl OptionPricer {
         }
     }
 
-
+    // Per 1%
     pub fn calc_rho(&mut self, option_type: OptionType) -> f64 {
-        match option_type {
+        let result = match option_type {
             OptionType::Call => {
                 self.strike_price * self.time_to_expiration * self.discount_factor * self.get_or_calc_normal_cdf_d2()
             },
             OptionType::Put => {
                 -self.strike_price * self.time_to_expiration * self.discount_factor * self.get_or_calc_normal_cdf_minus_d2()
             }
-        }
+        };
+        result /100.0
     }
 
     fn get_or_calc_normal_cdf_d1(&mut self) -> f64 {
@@ -169,6 +169,7 @@ impl OptionPricer {
         pdf / (self.spot_price * self.sqrt_t * self.volatility)
     }
 
+    /// Per Day
     pub fn calc_theta(&mut self, option_type: OptionType) -> f64 {
         if self.time_to_expiration <= 0.0 {
             return 0.0;
@@ -178,7 +179,7 @@ impl OptionPricer {
         let term1 = (-self.spot_price * pdf * self.volatility) / (2.0 * self.sqrt_t);
 
 
-        match option_type {
+        let result = match option_type {
             OptionType::Call => {
                 let term2 = self.risk_free_rate * self.strike_price * self.discount_factor * self.get_or_calc_normal_cdf_d2();
                 term1 - term2
@@ -187,10 +188,12 @@ impl OptionPricer {
                 let term2 = self.risk_free_rate * self.strike_price * self.discount_factor * self.get_or_calc_normal_cdf_minus_d2();
                 term1 + term2
             }
-        }
-
+        };
+        result / 365.0
     }
 
+
+    /// Per 1%
     pub fn calc_vega(&mut self) -> f64 {
         // Handle zero time case first
         if self.time_to_expiration <= 0.0 {
@@ -202,7 +205,8 @@ impl OptionPricer {
             return 0.0;
         }
         let pdf = self.get_or_calc_normal_pdf_d1();
-        self.spot_price * self.sqrt_t * pdf
+        let result = self.spot_price * self.sqrt_t * pdf;//per 100%
+        result /100.0
     }
 
     pub fn calculate_option(&mut self, option_type: OptionType) -> OptionValue {

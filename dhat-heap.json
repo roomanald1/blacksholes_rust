@@ -8,9 +8,9 @@
 "Mtu": "s",
 "tuth": 10,
 "cmd": "target/debug/blacksholes_rust",
-"pid": 7371,
+"pid": 3557,
 "tg": 0,
-"te": 4163497,
+"te": 1036476,
 "pps": [],
 "ftbl": [
 "[root]"

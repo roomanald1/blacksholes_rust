@@ -1,6 +1,5 @@
 use rand::{Rng};
-use rand_distr::{ StandardNormal, Distribution};
-use rand_distr::num_traits::real::Real;
+use rand_distr::{ StandardNormal};
 use rayon::prelude::*;
 use crate::utils::OptionType;
 
