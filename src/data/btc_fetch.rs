@@ -1,11 +1,12 @@
 use serde::Deserialize;
+use crate::stream::Price;
 
 #[derive(Debug, Deserialize, Clone)]
 pub struct MarketData {
     pub timestamp: f64,
-    pub open: f64,
-    pub high: f64,
-    pub low: f64,
+    pub open: Option<f64>,
+    pub high: Option<f64>,
+    pub low: Option<f64>,
     pub close: f64,
 }
 
@@ -13,6 +14,17 @@ pub struct MarketData {
 pub struct DeribitDepthResponse {
     pub result: DeribitDepth
 }
+
+#[derive(Debug, Deserialize, Clone)]
+pub struct DeribitSpotResponse {
+    pub result: DeribitSpot
+}
+#[derive(Debug, Deserialize, Clone)]
+pub struct DeribitSpot {
+    pub index_price: f64
+}
+
+
 #[derive(Debug, Deserialize, Clone)]
 pub struct DeribitDepth {
     pub index_price: f64,
@@ -25,32 +37,44 @@ pub struct DeribitDepth {
 #[derive(Debug)]
 pub struct PriceAmount {
     pub price: f64,
-    pub amount: f64,
-    pub spread: f64
+    pub amount: f64
 }
 
-pub fn get_bids(response: DeribitDepthResponse,mid: f64) -> Vec<PriceAmount>{
-    response.result.bids.into_iter().map(|bid|{
-        let price = bid.get(0).copied().unwrap_or(0.0)* response.result.index_price;
-        PriceAmount {
-            price,
-            amount: bid.get(1).copied().unwrap_or(0.0),
-            spread: price - mid
-        }
-    }).collect()
+pub fn get_discrepancy(bid: PriceAmount, ask: PriceAmount, model_premium: f64) -> f64 {
+    let market_premium = (bid.price + ask.price) / 2.0;
+    let discrepancy = ((model_premium - market_premium) / market_premium) * 100.0;
+    discrepancy
+}
+
+pub fn get_depth_info(response: DeribitDepthResponse) -> (PriceAmount, PriceAmount, f64){
+    let best_bid = response.result.bids.first().unwrap().clone()[0]* response.result.index_price;
+    let best_bid_volume = response.result.bids.first().unwrap().clone()[1];
+    let best_ask = response.result.asks.first().unwrap().clone()[0]* response.result.index_price;
+    let best_ask_volume = response.result.asks.first().unwrap().clone()[1];
+    let spread= best_ask - best_bid;
+    (
+        PriceAmount{price: best_bid, amount: best_bid_volume},
+        PriceAmount{price: best_ask, amount: best_ask_volume},
+        spread,
+    )
+}
+
+pub fn get_depth_data(response: DeribitDepthResponse) -> (Vec<PriceAmount>, Vec<PriceAmount>){
+    (
+        //Bids
+        response.result.bids.iter().map(|b| PriceAmount{
+            price: b.first().unwrap() * response.result.index_price,
+            amount: b.last().unwrap().clone()
+        }).collect(),
+        //Asks
+        response.result.asks.iter().map(|b| PriceAmount{
+            price: b.first().unwrap() * response.result.index_price,
+            amount: b.last().unwrap().clone()
+        }).collect()
+    )
 }
 
 
-pub fn get_asks(response: DeribitDepthResponse, mid: f64) -> Vec<PriceAmount>{
-    response.result.asks.into_iter().map(|bid|{
-        let price = bid.get(0).copied().unwrap_or(0.0)* response.result.index_price;
-        PriceAmount {
-            price,
-            amount: bid.get(1).copied().unwrap_or(0.0),
-            spread: price - mid
-        }
-    }).collect()
-}
 
 #[derive(Debug, Deserialize, Clone)]
 pub struct DeribitDepthsGreeks {
@@ -62,7 +86,7 @@ pub struct DeribitDepthsGreeks {
 }
 
 pub mod btc {
-    use crate::data::btc_fetch::{DeribitDepthResponse, MarketData};
+    use crate::data::btc_fetch::{DeribitDepthResponse, DeribitSpotResponse, MarketData};
     use zip::read::ZipArchive;
     use csv::ReaderBuilder;
     use std::io::{Cursor, Read};
@@ -71,9 +95,58 @@ pub mod btc {
     use tokio::time::sleep;
     use std::time::Duration as StdDuration;
     use futures::future::try_join_all;
-    use libm::exp;
     use tokio::task;
     use crate::utils::OptionType;
+
+
+    pub async fn fetch_spot() -> Result<DeribitSpotResponse, String> {
+        let url = format!("https://www.deribit.com/api/v2/public/get_index_price?index_name=btc_usd");
+        let response = reqwest::get(url).await.map_err(|e| e.to_string())?;
+        let response : DeribitSpotResponse =  response.json::<DeribitSpotResponse>().await.map_err(|e| e.to_string())?;
+        Ok(response)
+    }
+
+    pub async fn fetch_prev_ndays_1s_data(n: i64) -> Result<Vec<MarketData>, String> {
+        let today = Utc::now().date_naive();
+        let start_date = today - Duration::days(n);
+
+
+        // Generate all URLs first (synchronous)
+        let urls: Vec<String> = (0..n)
+            .map(|i| {
+                let date = start_date + Duration::days(i);
+                format!(
+                    "https://data.binance.vision/data/spot/daily/klines/BTCUSDT/1h/BTCUSDT-1h-{}.zip",
+                    date.format("%Y-%m-%d")
+                )
+            })
+            .collect();
+
+        let tasks = urls.into_iter().map(|url| {
+            task::spawn(async move {
+                match fetch_and_parse(&url).await {
+                    Ok(data) => Ok::<Vec<MarketData>, String>(data),
+                    Err(e) => {
+                        eprintln!("Failed to fetch {}: {}", url, e);
+                        Ok(Vec::new()) // Skip errors, return empty Vec
+                    }
+                }
+            })
+        });
+
+        // Await all tasks and flatten results
+        let results: Vec<Vec<MarketData>> = try_join_all(tasks)
+            .await
+            .map_err(|e| format!("Join error: {}", e))?
+            .into_iter()
+            .filter_map(Result::ok)
+            .collect();
+        let mut r: Vec<MarketData> = results.into_iter().flatten().collect();
+        r.sort_by(|a,b| {
+            a.timestamp.partial_cmp(&b.timestamp).unwrap_or(std::cmp::Ordering::Equal)
+        });
+        Ok(r)
+    }
 
     pub async fn fetch_prev_ndays(n: i64) -> Result<Vec<MarketData>, String> {
         let today = Utc::now().date_naive();
@@ -109,8 +182,11 @@ pub mod btc {
             .into_iter()
             .filter_map(Result::ok)
             .collect();
-
-        Ok(results.into_iter().flatten().collect())
+        let mut r: Vec<MarketData> = results.into_iter().flatten().collect();
+        r.sort_by(|a,b| {
+            a.timestamp.partial_cmp(&b.timestamp).unwrap_or(std::cmp::Ordering::Equal)
+        });
+        Ok(r)
     }
 
     async fn fetch_and_parse(url: &str) -> Result<Vec<MarketData>, String> {

@@ -9,7 +9,7 @@ use crate::data::btc_fetch::btc::fetch_live_option_price;
 use crate::utils::date_utils::round_to_nearest_1000;
 use crate::utils::OptionType;
 use crate::pricing::option_pricer::{OptionPricer, OptionValue};
-use crate::pricing::volatility::{TimeAwareEwmaVolatility};
+use crate::pricing::volatility::TimeAwareEwmaVolatility;
 
 #[derive(Debug, Clone)]
 pub struct Price {
@@ -26,7 +26,7 @@ pub async fn start_streaming() -> Result<(), String> {
     let time_to_expiration_in_years = crate::utils::date_utils::time_to_expiry_in_years(expiry);
 
     let hist = btc::fetch_prev_ndays(90).await.map_err(|e| e.to_string())?;
-    let mut vol = TimeAwareEwmaVolatility::new(0.94, 90);
+    let mut vol = TimeAwareEwmaVolatility::new(0.94, 30);
 
     //Initialise Weighted Moving Average Vol Calc
     hist.iter().for_each(|i| {

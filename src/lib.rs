@@ -3,5 +3,6 @@ pub mod stream;
 pub mod utils;
 pub mod pricing;
 pub mod data;
+pub mod book;
 
 
