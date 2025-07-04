@@ -31,9 +31,7 @@ pub fn monte_carlo(option_type: OptionType, spot: f64, risk_free_rate: f64, vol:
 
 #[cfg(test)]
 mod test{
-    use crate::utils::OptionType;
-    use crate::monte_carlo::{monte_carlo};
-    use crate::option_pricer::{OptionPricer};
+    use crate::{pricing::{monte_carlo::monte_carlo, option_pricer::OptionPricer}, utils::OptionType};
 
     #[test]
     fn monte_carlo_vs_blacksholes() {

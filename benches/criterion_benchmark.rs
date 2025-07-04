@@ -6,9 +6,7 @@ use criterion::{
     criterion_main
 };
 use pprof::criterion::{PProfProfiler, Output};
-use blacksholes_rust::monte_carlo::monte_carlo;
-use blacksholes_rust::option_pricer::{OptionPricer, OptionValue};
-use blacksholes_rust::utils::OptionType;
+use blacksholes_rust::{pricing::{monte_carlo::monte_carlo, option_pricer::{OptionPricer, OptionValue}}, utils::OptionType};
 
 fn criterion_benchmark(c: &mut Criterion) {
 

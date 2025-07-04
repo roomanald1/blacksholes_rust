@@ -279,9 +279,9 @@ pub mod btc {
 mod tests {
     use crate::data::btc_fetch::btc;
 
-    #[test]
-    fn gets_n_days_data() {
-        let data = btc::fetch_prev_ndays(30).unwrap();
+    #[tokio::test]
+    async fn gets_n_days_data() {
+        let data = btc::fetch_prev_ndays(30).await.unwrap();
         assert_eq!(data.len(), 30);
     }
 }
